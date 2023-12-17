@@ -18,8 +18,7 @@ const Content = props => {
 
 const Total = props => {
 	let sum = 0;
-	console.log(props);
-	props.total.map(x => (sum += x));
+	props.parts.map(x => (sum += x.exercises));
 	return (
 		<>
 			<p>Number of excersices {sum}</p>
@@ -28,22 +27,40 @@ const Total = props => {
 };
 
 const App = () => {
-	const course = 'Half Stack application development';
-	const part1 = 'Fundamentals of React';
-	const exercises1 = 10;
-	const part2 = 'Using props to pass data';
-	const exercises2 = 7;
-	const part3 = 'State of a component';
-	const exercises3 = 14;
-	const total = [exercises1, exercises2, exercises3];
+	const course = {
+		name: 'Half Stack application development',
+		parts: [
+			{
+				name: 'Fundamentals of React',
+				exercises: 10,
+			},
+			{
+				name: 'Using props to pass data',
+				exercises: 7,
+			},
+			{
+				name: 'State of a component',
+				exercises: 14,
+			},
+		],
+	};
 
 	return (
 		<div>
-			<Header course={course} />
-			<Content part={part1} excersices={exercises1} />
-			<Content part={part2} excersices={exercises2} />
-			<Content part={part3} excersices={exercises3} />
-			<Total total={total} />
+			<Header course={course.name} />
+			<Content
+				part={course.parts[0].name}
+				excersices={course.parts[0].exercises}
+			/>
+			<Content
+				part={course.parts[1].name}
+				excersices={course.parts[1].exercises}
+			/>
+			<Content
+				part={course.parts[2].name}
+				excersices={course.parts[2].exercises}
+			/>
+			<Total parts={course.parts} />
 		</div>
 	);
 };
