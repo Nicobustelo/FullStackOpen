@@ -1,34 +1,24 @@
 {
-  "persons": [
-    {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": 4
-    },
-    {
-      "name": "Nicolas Bustelo",
-      "number": "2616575558",
-      "id": 5
-    },
-    {
-      "name": "Ernesto Bustelo",
-      "number": "2615351059",
-      "id": 6
-    },
-    {
-      "name": "Pamela Fernandex",
-      "number": "2615351045",
-      "id": 7
-    },
-    {
-      "name": "Julian Alba",
-      "number": "261473898",
-      "id": 8
-    },
-    {
-      "name": "Ezequiel Bustelo",
-      "number": "2616389923",
-      "id": 9
-    }
-  ]
+	"persons": [
+		{
+			"name": "Arto Hellas",
+			"number": "040-123456",
+			"id": 1
+		},
+		{
+			"name": "Ada Lovelace",
+			"number": "39-44-5323523",
+			"id": 2
+		},
+		{
+			"name": "Dan Abramov",
+			"number": "12-43-234345",
+			"id": 3
+		},
+		{
+			"name": "Mary Poppendieck",
+			"number": "39-23-6423122",
+			"id": 4
+		}
+	]
 }
