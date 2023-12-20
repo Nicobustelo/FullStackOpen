@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Filter = ({ value, eventHandler }) => {
 	return (
@@ -45,14 +46,22 @@ const Persons = ({ filteredPersons }) => {
 };
 
 const App = () => {
-	const [persons, setPersons] = useState([
-		{ name: 'Pamela Fernandez', number: '2615351045' },
-		{ name: 'Nicolas Bustelo', number: '2616575558' },
-		{ name: 'Ernesto Bustelo', number: '2615351059' },
-	]);
+	const [persons, setPersons] = useState([]);
 	const [newName, setNewName] = useState('');
 	const [newNumber, setNewNumber] = useState('');
 	const [filterSearch, setFilterSearch] = useState('');
+
+	const hook = () => {
+		axios.get('http://localhost:3001/persons').then(response => {
+			console.log('fetching data...');
+			console.log(response.data);
+			setPersons(response.data);
+		});
+	};
+
+	useEffect(hook, []);
+
+	console.log(`rendered page with ${persons.length} persons`);
 
 	const filteredPersons = persons.filter(person => {
 		return person.name.includes(filterSearch);
