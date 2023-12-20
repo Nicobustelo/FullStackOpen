@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import phonebookService from './services/phonebook';
 
 const Filter = ({ value, eventHandler }) => {
 	return (
@@ -33,12 +33,13 @@ const Input = ({ text, value, onChange }) => {
 	);
 };
 
-const Persons = ({ filteredPersons }) => {
+const Persons = ({ filteredPersons, eventHandler }) => {
 	return (
 		<div>
 			{filteredPersons.map(person => (
 				<p key={person.name}>
-					{person.name} {person.number}
+					{person.name} {person.number}{' '}
+					<button onClick={() => eventHandler(person)}>delete</button>
 				</p>
 			))}
 		</div>
@@ -52,10 +53,10 @@ const App = () => {
 	const [filterSearch, setFilterSearch] = useState('');
 
 	const hook = () => {
-		axios.get('http://localhost:3001/persons').then(response => {
+		phonebookService.getAll().then(response => {
 			console.log('fetching data...');
-			console.log(response.data);
-			setPersons(response.data);
+			console.log(response);
+			setPersons(response);
 		});
 	};
 
@@ -75,13 +76,28 @@ const App = () => {
 	const addPerson = event => {
 		event.preventDefault();
 		if (persons.find(person => person.name === newName)) {
-			window.alert(`${newName} is already added to phonebook`);
+			confirm(
+				`${newName} is already added to phonebook, replace the old number with a new one?`
+			);
+			const updatePerson = persons.find(person => person.name === newName);
+			const updatedPerson = { ...updatePerson, number: newNumber };
+			phonebookService.update(updatePerson.id, updatedPerson).then(response => {
+				setPersons(
+					persons.map(person =>
+						person.id !== updatePerson.id ? person : updatedPerson
+					)
+				);
+			});
 		} else {
 			const nameToAdd = {
 				name: newName,
 				number: newNumber,
 			};
-			setPersons(persons.concat(nameToAdd));
+			phonebookService.create(nameToAdd).then(response => {
+				setPersons(persons.concat(nameToAdd));
+				setNewNumber('');
+				setNewName('');
+			});
 		}
 	};
 
@@ -93,6 +109,14 @@ const App = () => {
 	const changeFilter = event => {
 		console.log(event.target.value);
 		setFilterSearch(event.target.value);
+	};
+
+	const deleteContact = ({ name, id }) => {
+		if (confirm(`Delete ${name}?`)) {
+			phonebookService.deletePerson(id).then(response => {
+				setPersons(persons.filter(p => p.id !== id));
+			});
+		}
 	};
 
 	return (
@@ -108,7 +132,7 @@ const App = () => {
 				numberChange={numberChange}
 			/>
 			<h3>Numbers</h3>
-			<Persons filteredPersons={filteredPersons} />
+			<Persons filteredPersons={filteredPersons} eventHandler={deleteContact} />
 		</div>
 	);
 };
